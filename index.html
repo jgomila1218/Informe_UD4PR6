@@ -3,73 +3,936 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informe Tècnic - Auditoria d'Eficiència</title>
+    <title>Informe Tècnic - Auditoria d'Eficiència SMX</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
-        h1, h2, h3 { color: #2E86C1; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        table, th, td { border: 1px solid #555; }
-        th, td { padding: 8px; text-align: left; }
-        .graph { font-family: monospace; white-space: pre; background-color: #f4f4f4; padding: 10px; }
-        .highlight { color: #C0392B; font-weight: bold; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0f172a;
+            --secondary: #1e293b;
+            --accent: #06b6d4;
+            --accent-glow: rgba(6, 182, 212, 0.3);
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --glass: rgba(30, 41, 59, 0.7);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* Animated background particles */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--accent);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            from { transform: translateY(100vh) translateX(0); }
+            to { transform: translateY(-10vh) translateX(100px); }
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 27, 75, 0.95));
+            backdrop-filter: blur(10px);
+            padding: 3rem 1rem;
+            text-align: center;
+            border-bottom: 1px solid var(--accent);
+            box-shadow: 0 4px 30px var(--accent-glow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            animation: scan 3s infinite;
+        }
+
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        .group-info {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: var(--glass);
+            border-radius: 12px;
+            display: inline-block;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .group-info span {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Section Cards */
+        section {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(6, 182, 212, 0.15);
+        }
+
+        section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--accent), transparent);
+        }
+
+        h2 {
+            color: var(--accent);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+        }
+
+        h2::before {
+            content: '▹';
+            font-size: 1.5rem;
+        }
+
+        h3 {
+            color: var(--text);
+            font-size: 1.3rem;
+            margin: 1.5rem 0 1rem;
+            font-weight: 600;
+        }
+
+        /* Questionnaire */
+        .question {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--accent);
+            transition: all 0.3s ease;
+        }
+
+        .question:hover {
+            background: rgba(15, 23, 42, 0.8);
+            transform: translateX(5px);
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text);
+            font-size: 1.05rem;
+        }
+
+        .answer {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge.true {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .badge.false {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .justification {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+            padding-left: 1rem;
+            border-left: 2px solid var(--secondary);
+        }
+
+        /* Process Analysis */
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .process-card {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(15, 23, 42, 0.8));
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .process-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            opacity: 0.5;
+        }
+
+        .process-name {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .process-detail {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--warning);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+        }
+
+        .warning-box::before {
+            content: '⚠';
+            font-size: 1.5rem;
+            color: var(--warning);
+        }
+
+        /* Benchmarking */
+        .benchmark-container {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 1.5rem;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .command-box {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            color: #7ee787;
+            margin: 1rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .command-box::before {
+            content: '$';
+            color: var(--accent);
+            margin-right: 0.5rem;
+        }
+
+        .speed-comparison {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .speed-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            min-width: 200px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .speed-item.reference {
+            border-color: var(--text-muted);
+        }
+
+        .speed-item.ours {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+            position: relative;
+        }
+
+        .speed-item.ours::after {
+            content: '✓';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: var(--success);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .speed-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            display: block;
+        }
+
+        .speed-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .improvement-badge {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 700;
+            margin-top: 1rem;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Hardware Proposal */
+        .proposal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .proposal-card {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 27, 75, 0.9));
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .proposal-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.2);
+        }
+
+        .proposal-number {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .proposal-title {
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .proposal-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .budget-box {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(6, 182, 212, 0.05));
+            border: 2px solid var(--accent);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .budget-amount {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        /* PC Comparison Chart */
+        .comparison-chart {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .chart-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .chart-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .chart-label {
+            min-width: 100px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .chart-bar-container {
+            flex: 1;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chart-bar {
+            height: 100%;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 1rem;
+            font-weight: 700;
+            transition: width 1s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .chart-bar.pc1 {
+            width: 85%;
+            background: linear-gradient(90deg, var(--danger), #dc2626);
+        }
+
+        .chart-bar.pc2 {
+            width: 100%;
+            background: linear-gradient(90deg, var(--success), #059669);
+        }
+
+        .analysis-text {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--warning);
+            border-radius: 8px;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 3rem;
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .tech-badge {
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            section { padding: 1.5rem; }
+            .speed-comparison { flex-direction: column; }
+            .chart-row { flex-direction: column; align-items: flex-start; }
+            .chart-label { min-width: auto; }
+        }
+
+        /* Print styles */
+        @media print {
+            body { background: white; color: black; }
+            section { break-inside: avoid; page-break-inside: avoid; }
+            .bg-animation { display: none; }
+        }
     </style>
 </head>
 <body>
-    <h1>Informe Tècnic - Auditoria d'Eficiència</h1>
+    <div class="bg-animation" id="particles"></div>
 
-    <h2>1. Dades de l'htop</h2>
-    <p>En el sistema "net", els processos que més consumien CPU i RAM eren:</p>
-    <table>
-        <thead>
-            <tr>
-                <th>Procés</th>
-                <th>PID</th>
-                <th>CPU (%)</th>
-                <th>RAM (%)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr><td>cinnamon</td><td>1953</td><td>25</td><td>15</td></tr>
-            <tr><td>Xorg</td><td>1120</td><td>10</td><td>8</td></tr>
-            <tr><td>Chrome</td><td>2350</td><td>20</td><td>12</td></tr>
-            <tr><td>veyon-s+</td><td>3010</td><td>5</td><td>4</td></tr>
-        </tbody>
-    </table>
-    <p>Per reduir la càrrega del sistema, es van aturar processos no crítics amb <code>htop</code> i la tecla <strong>k</strong>.</p>
+    <header>
+        <h1>Informe Tècnic d'Auditoria d'Eficiència</h1>
+        <p class="subtitle">Activitat 4.6 - Sistemes Microinformàtics i Xarxes (SMX)</p>
+        <div class="group-info">
+            <span>Integrants del Grup:</span> [Nom Alumne 1], [Nom Alumne 2]
+        </div>
+    </header>
 
-    <h2>2. Benchmarking de velocitat de lectura</h2>
-    <p>Comanda utilitzada:</p>
-    <pre class="graph">dd if=/dev/zero of=testfile bs=1G count=1 oflag=dsync</pre>
+    <div class="container">
+        <!-- Sección 1: Cuestionario -->
+        <section id="cuestionario">
+            <h2>1. Anàlisi Teòric: Verdader o Fals</h2>
+            
+            <div class="question">
+                <div class="question-text">En el benchmarking, el color dels components o el màrqueting del fabricant són paràmetres racionals que hem de tenir en compte.</div>
+                <div class="answer">
+                    <span class="badge false">Fals</span>
+                </div>
+                <div class="justification">
+                    L'únic aspecte realment important és la nota que obté el hardware. No hem de tenir en compte la marca ni el color, ja que no afecten de manera directa al rendiment del sistema.
+                </div>
+            </div>
 
-    <p>Resultats:</p>
-    <ul>
-        <li>PC de la pràctica anterior: 779 MB/s</li>
-        <li>El nostre PC (PC1 - i5 10400, 16GB RAM, 1TB NVME): 1,1 GB/s</li>
-    </ul>
+            <div class="question">
+                <div class="question-text">Windows 11 es pot instal·lar sense clau de producte i activar-lo més tard.</div>
+                <div class="answer">
+                    <span class="badge true">Vertader</span>
+                </div>
+                <div class="justification">
+                    Microsoft permet la instal·lació de Windows 11 sense clau de producte, funcionant en mode limitat fins a la seva posterior activació.
+                </div>
+            </div>
 
-    <div class="graph">
-Comparativa de velocitat:
-PC anterior: 779 MB/s  |███████████████
-PC1 actual: 1100 MB/s  |███████████████████████
+            <div class="question">
+                <div class="question-text">L'eina smartctl a Linux serveix per mesurar la velocitat de la targeta de xarxa.</div>
+                <div class="answer">
+                    <span class="badge false">Fals</span>
+                </div>
+                <div class="justification">
+                    L'eina smartctl serveix per monitoritzar i provar dispositius d'emmagatzematge SATA/ATA (discos durs i SSDs), no targetes de xarxa.
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-text">Tiny Core Linux és una distribució que s'executa completament des de la RAM i ocupa només uns 23 MB.</div>
+                <div class="answer">
+                    <span class="badge true">Vertader</span>
+                </div>
+                <div class="justification">
+                    És una distribució de Linux extremadament lleugera i minimalista, dissenyada per arrencar ràpidament i funcionar gairebé totalment en memòria RAM, ocupant menys de 25 MB en la seva versió base.
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-text">Per instal·lar Windows 11, cal un processador de 64 bits, mínim 4 GB de RAM i TPM versió 2.0.</div>
+                <div class="answer">
+                    <span class="badge true">Vertader</span>
+                </div>
+                <div class="justification">
+                    Aquests són els requisits mínims oficials de Microsoft per a la instal·lació de Windows 11, incloent el xip de seguretat TPM 2.0.
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-text">Quina comanda de Linux faries servir per veure en temps real quin procés consumeix més CPU o RAM?</div>
+                <div class="answer">
+                    <span class="badge true">Resposta</span>
+                </div>
+                <div class="justification">
+                    La comanda més habitual és <code>htop</code>, que proporciona una interfície interactiva i visual per monitoritzar processos en temps real.
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-text">Si un equip de marca (com HP o Dell) porta la clau de Windows integrada a la BIOS, com s'anomena aquesta llicència?</div>
+                <div class="answer">
+                    <span class="badge true">Resposta</span>
+                </div>
+                <div class="justification">
+                    Es tracta d'una llicència <strong>OEM</strong> (Original Equipment Manufacturer), vinculada al hardware específic de l'equip.
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-text">Segons la documentació del muntatge, quins dos tipus de documentació cal preparar al final del procés?</div>
+                <div class="answer">
+                    <span class="badge true">Resposta</span>
+                </div>
+                <div class="justification">
+                    Cal fer un <strong>informe tècnic</strong> i una <strong>fitxa tècnica</strong> detallant el procés i les especificacions.
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-text">A la fase de benchmarking, què hem de fer si els resultats d'una prova semblen fora de lloc?</div>
+                <div class="answer">
+                    <span class="badge true">Resposta</span>
+                </div>
+                <div class="justification">
+                    Cal <strong>tornar a fer la prova</strong> per verificar la consistència o bé <strong>fer una prova diferent</strong> per contrastar resultats.
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 2: Neteja de Processos -->
+        <section id="processos">
+            <h2>2. Neteja i Optimització de Processos d'Usuari</h2>
+            
+            <h3>🔍 Identificació de Processos Consumidors</h3>
+            <p>Utilitzant <code>htop</code> des de la terminal, s'han identificat els següents processos com els principals consumidors de recursos:</p>
+            
+            <div class="process-grid">
+                <div class="process-card">
+                    <div class="process-name">Cinnamon</div>
+                    <div class="process-detail">Entorn d'escriptori - Alt consum de RAM i CPU per efectes visuals</div>
+                </div>
+                <div class="process-card">
+                    <div class="process-name">Xorg</div>
+                    <div class="process-detail">Servidor gràfic - Gestió de pantalla i perifèrics d'entrada</div>
+                </div>
+                <div class="process-card">
+                    <div class="process-name">Chrome</div>
+                    <div class="process-detail">Navegador web - Múltiples processos per pestanyes i extensions</div>
+                </div>
+                <div class="process-card">
+                    <div class="process-name">Veyon-S+</div>
+                    <div class="process-detail">Software de control d'aula - Monitorització en segon pla</div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <div>
+                    <strong>Observació Crítica:</strong> En aturar el procés <code>cinnamon (PID 1953)</code> mitjançant la tecla 'k' a htop o la comanda <code>kill</code>, el sistema operatiu es corromp completament, demostrant que és un procés crític per a l'entorn gràfic.
+                </div>
+            </div>
+
+            <h3>💡 Estratègia d'Alliberament de RAM</h3>
+            <p>Deixant el sistema amb la mínima càrrega de RAM des de l'entorn d'usuari:</p>
+            <ul style="margin-left: 2rem; color: var(--text-muted); line-height: 2;">
+                <li>El sistema alliberarà memòria de programes en segon pla i memòria cau</li>
+                <li>No es tancaran processos crítics del sistema</li>
+                <li>Es guanya memòria disponible però possiblement amb certa lentitud inicial en reobrir aplicacions</li>
+                <li>Les aplicacions hauran de recarregar-se des de zero</li>
+            </ul>
+        </section>
+
+        <!-- Sección 3: Benchmarking -->
+        <section id="benchmarking">
+            <h2>3. Benchmarking de Velocitat d'Escriptura</h2>
+            
+            <div class="benchmark-container">
+                <h3>🧪 Metodologia de Prova</h3>
+                <p>Com que no podem escriure al disc a nivell de sistema, hem provat la velocitat des de la perspectiva de l'usuari amb la següent comanda:</p>
+                
+                <div class="command-box">
+                    dd if=/dev/zero of=testfile bs=1G count=1 oflag=dsync
+                </div>
+                
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">
+                    <em>Nota: Després de la prova, s'executa <code>rm testfile</code> per alliberar espai de disc.</em>
+                </p>
+
+                <h3 style="margin-top: 2rem;">📊 Resultats Comparatius</h3>
+                <div class="speed-comparison">
+                    <div class="speed-item reference">
+                        <span class="speed-value">779 MB/s</span>
+                        <div class="speed-label">PC de Referència<br>(Pràctica Anterior)</div>
+                    </div>
+                    <div class="speed-item ours">
+                        <span class="speed-value" style="color: var(--success);">1,1 GB/s</span>
+                        <div class="speed-label">El Nostre PC<br>(Aula Actual)</div>
+                    </div>
+                </div>
+
+                <div style="text-align: center;">
+                    <span class="improvement-badge">+41% més ràpid</span>
+                </div>
+
+                <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(16, 185, 129, 0.1); border-radius: 12px; border-left: 4px solid var(--success);">
+                    <strong>Justificació Tècnica:</strong> El nostre equip supera en un 41% la velocitat de referència, indicant un subsistema d'emmagatzematge més modern (probablement NVMe de nova generació vs. SATA SSD o NVMe anterior) o menys càrrega de sistema durant la prova.
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 4: Propuesta de Mejora -->
+        <section id="proposta">
+            <h2>4. Proposta de Millora de Maquinari</h2>
+            
+            <p style="margin-bottom: 1.5rem; color: var(--text-muted);">
+                <strong>Situació:</strong> PC amb Intel i5-10400, 16GB RAM, 1TB NVMe. Problemes detectats: temperatures superiors a 60ºC sota càrrega i errors de software amb congelaments del ratolí.
+            </p>
+
+            <div class="proposal-grid">
+                <div class="proposal-card">
+                    <div class="proposal-number">1</div>
+                    <div class="proposal-title">Millora de Ventilació</div>
+                    <div class="proposal-desc">
+                        <strong>Solució:</strong> Instal·lació d'un dissipador de CPU tipus torre amb ventilador de 120mm (ex: Cooler Master Hyper 212 o similar).
+                        <br><br>
+                        <strong>Benefici:</strong> Reducció de 10-15ºC sota càrrega, mantenint el sistema per sota dels 60ºC.
+                    </div>
+                </div>
+
+                <div class="proposal-card">
+                    <div class="proposal-number">2</div>
+                    <div class="proposal-title">Alternativa de Software Lleuger</div>
+                    <div class="proposal-desc">
+                        <strong>Recomanació:</strong> Migració a <strong>Lubuntu</strong> o <strong>antiX</strong>.
+                        <br><br>
+                        <strong>Benefici:</strong> Consum inferior a 1GB de RAM en repòs, alliberant recursos per evitar congelaments del ratolí i millorar la resposta general del sistema.
+                    </div>
+                </div>
+
+                <div class="proposal-card">
+                    <div class="proposal-number">3</div>
+                    <div class="proposal-title">Ampliació de RAM (Opcional)</div>
+                    <div class="proposal-desc">
+                        <strong>Solució:</strong> Afegir 8GB addicionals (si hi ha slot lliure) o substituir per kit de 32GB.
+                        <br><br>
+                        <strong>Benefici:</strong> Major marge per a multitasca i aplicacions intensives, tot i que 16GB són suficients per a la majoria de tasques.
+                    </div>
+                </div>
+            </div>
+
+            <div class="budget-box">
+                <div class="proposal-title" style="color: var(--text-muted); margin-bottom: 0.5rem;">Pressupost Total Estimat</div>
+                <div class="budget-amount">&lt; 100€</div>
+                <p style="color: var(--text-muted); margin-top: 1rem;">
+                    Dissipador: ~30-40€ | Ventiladors addicionals: ~20€ | Thermal paste: ~10€<br>
+                    Software: 0€ (codi obert)
+                </p>
+            </div>
+        </section>
+
+        <!-- Sección 5: Comparativa PC -->
+        <section id="comparativa">
+            <h2>5. Anàlisi Comparativa: PC1 vs PC2</h2>
+            
+            <div class="comparison-chart">
+                <div class="chart-container">
+                    <div class="chart-row">
+                        <div class="chart-label">PC1 (PC12)</div>
+                        <div class="chart-bar-container">
+                            <div class="chart-bar pc1" style="width: 85%;">i5-10400</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--text-muted); margin-left: 100px; margin-bottom: 1rem;">
+                        16GB RAM | 1TB NVMe | Problemes d'estabilitat
+                    </div>
+
+                    <div class="chart-row">
+                        <div class="chart-label">PC2 (PC11)</div>
+                        <div class="chart-bar-container">
+                            <div class="chart-bar pc2" style="width: 100%;">i5-11400</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--text-muted); margin-left: 100px;">
+                        16GB RAM | 1TB NVMe | Rendiment estable
+                    </div>
+                </div>
+
+                <div class="analysis-text">
+                    <strong>Anàlisi Tècnica:</strong><br>
+                    Teòricament, el PC2 (i5-11400) només té un ~15% més d'IPC (Instruccions Per Cicle) respecte al PC1 (i5-10400), la qual cosa no hauria de suposar una diferència significativa en condicions normals.<br><br>
+                    
+                    No obstant, el <strong>PC1 presenta problemes de rendiment i estabilitat</strong> (sobrecalfament i congelaments), que impliquen una diferència notòria en l'experiència d'ús real. Això suggereix que el coll d'ampolla no és la CPU en si, sinó:
+                    <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+                        <li>Thermal throttling per mala ventilació</li>
+                        <li>Software pesat que consumeix recursos (Cinnamon vs. entorns més lleugers)</li>
+                        <li>Possible degradació de la pasta tèrmica o obstrucció de vents</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 6: Conclusiones -->
+        <section id="conclusions">
+            <h2>6. Conclusions i Certificat Tècnic</h2>
+            
+            <p style="line-height: 1.8; color: var(--text-muted);">
+                Mitjançant aquesta auditoria, hem demostrat que encara que no tinguem permisos d'administrador, podem:
+            </p>
+            
+            <ul style="margin: 1.5rem 0; margin-left: 2rem; line-height: 2; color: var(--text);">
+                <li>Identificar processos consumidors de recursos mitjançant <code>htop</code></li>
+                <li>Realitzar proves de rendiment comparatives amb <code>dd</code></li>
+                <li>Proposar millores de hardware realistes sota pressupost</li>
+                <li>Diferenciar entre problemes de hardware (temperatura) i software (consum de RAM)</li>
+            </ul>
+
+            <div style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(6, 182, 212, 0.05)); border: 2px solid var(--accent); border-radius: 16px; padding: 2rem; text-align: center; margin-top: 2rem;">
+                <h3 style="color: var(--accent); margin-bottom: 1rem;">✓ Sistema Certificat</h3>
+                <p style="color: var(--text);">
+                    El sistema ha passat per un procés d'optimització i anàlisi exhaustiu.<br>
+                    <strong>Estat final:</strong> Sistema net amb mínima càrrega de RAM des de l'entorn d'usuari.
+                </p>
+            </div>
+        </section>
     </div>
-    <p>El nostre PC és un <strong>41% més ràpid</strong> que el PC de la pràctica anterior → tot i que el PC2 té només un 15% més de IPC, el rendiment i estabilitat del PC1 és superior a causa de la càrrega real i optimització del sistema.</p>
 
-    <h2>3. Proposta de millora de hardware</h2>
-    <p>Situació actual: PC amb i5-10400, 16GB RAM, 1TB NVME, temperatura > 60ºC i errors de software (ratolí lent amb alta càrrega).</p>
-    <ol>
-        <li><strong>Millora de ventilació:</strong> Afegir un ventilador extra de 120mm a la caixa o substituir el dissipador de la CPU per un model més eficient (p. ex. Cooler Master Hyper 212).</li>
-        <li><strong>Alternativa de programari:</strong> Instal·lar Lubuntu o antiX, distribucions que consumeixen menys de 1 GB de RAM i redueixen la saturació del ratolí.</li>
-        <li><strong>Pressupost:</strong> Millora de ventilació i programari dins de <strong>100€</strong>.</li>
-    </ol>
+    <footer>
+        <p>Informe generat per a l'Activitat 4.6 - SMX</p>
+        <div class="tech-stack">
+            <span class="tech-badge">HTML5</span>
+            <span class="tech-badge">CSS3</span>
+            <span class="tech-badge">Linux</span>
+            <span class="tech-badge">Benchmarking</span>
+            <span class="tech-badge">htop</span>
+        </div>
+        <p style="margin-top: 1rem; font-size: 0.9rem;">
+            Data: 24 de Febrer de 2026
+        </p>
+    </footer>
 
-    <h2>4. Conclusions</h2>
-    <p>L'objectiu de l'auditoria és demostrar que, amb eines senzilles (htop, dd, gestió de processos), podem millorar l'eficiència d'un sistema “Apte” sense necessitat de ser administradors. La comparativa de velocitat i la proposta de millora permeten optimitzar tant el rendiment com l'estabilitat del PC.</p>
+    <script>
+        // Generar partículas de fondo
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
 
-    <h2>Integrants del grup</h2>
-    <ul>
-        <li>Nom 1</li>
-        <li>Nom 2</li>
-        <li>Nom 3</li>
-    </ul>
+        // Animación de barras al hacer scroll
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: "0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.width = entry.target.classList.contains('pc1') ? '85%' : '100%';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.chart-bar').forEach(bar => {
+            bar.style.width = '0';
+            observer.observe(bar);
+        });
+    </script>
 </body>
 </html>
