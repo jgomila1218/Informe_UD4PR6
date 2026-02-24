@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe Tècnic - Auditoria d'Eficiència</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+        h1, h2, h3 { color: #2E86C1; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        table, th, td { border: 1px solid #555; }
+        th, td { padding: 8px; text-align: left; }
+        .graph { font-family: monospace; white-space: pre; background-color: #f4f4f4; padding: 10px; }
+        .highlight { color: #C0392B; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Informe Tècnic - Auditoria d'Eficiència</h1>
+
+    <h2>1. Dades de l'htop</h2>
+    <p>En el sistema "net", els processos que més consumien CPU i RAM eren:</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Procés</th>
+                <th>PID</th>
+                <th>CPU (%)</th>
+                <th>RAM (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>cinnamon</td><td>1953</td><td>25</td><td>15</td></tr>
+            <tr><td>Xorg</td><td>1120</td><td>10</td><td>8</td></tr>
+            <tr><td>Chrome</td><td>2350</td><td>20</td><td>12</td></tr>
+            <tr><td>veyon-s+</td><td>3010</td><td>5</td><td>4</td></tr>
+        </tbody>
+    </table>
+    <p>Per reduir la càrrega del sistema, es van aturar processos no crítics amb <code>htop</code> i la tecla <strong>k</strong>.</p>
+
+    <h2>2. Benchmarking de velocitat de lectura</h2>
+    <p>Comanda utilitzada:</p>
+    <pre class="graph">dd if=/dev/zero of=testfile bs=1G count=1 oflag=dsync</pre>
+
+    <p>Resultats:</p>
+    <ul>
+        <li>PC de la pràctica anterior: 779 MB/s</li>
+        <li>El nostre PC (PC1 - i5 10400, 16GB RAM, 1TB NVME): 1,1 GB/s</li>
+    </ul>
+
+    <div class="graph">
+Comparativa de velocitat:
+PC anterior: 779 MB/s  |███████████████
+PC1 actual: 1100 MB/s  |███████████████████████
+    </div>
+    <p>El nostre PC és un <strong>41% més ràpid</strong> que el PC de la pràctica anterior → tot i que el PC2 té només un 15% més de IPC, el rendiment i estabilitat del PC1 és superior a causa de la càrrega real i optimització del sistema.</p>
+
+    <h2>3. Proposta de millora de hardware</h2>
+    <p>Situació actual: PC amb i5-10400, 16GB RAM, 1TB NVME, temperatura > 60ºC i errors de software (ratolí lent amb alta càrrega).</p>
+    <ol>
+        <li><strong>Millora de ventilació:</strong> Afegir un ventilador extra de 120mm a la caixa o substituir el dissipador de la CPU per un model més eficient (p. ex. Cooler Master Hyper 212).</li>
+        <li><strong>Alternativa de programari:</strong> Instal·lar Lubuntu o antiX, distribucions que consumeixen menys de 1 GB de RAM i redueixen la saturació del ratolí.</li>
+        <li><strong>Pressupost:</strong> Millora de ventilació i programari dins de <strong>100€</strong>.</li>
+    </ol>
+
+    <h2>4. Conclusions</h2>
+    <p>L'objectiu de l'auditoria és demostrar que, amb eines senzilles (htop, dd, gestió de processos), podem millorar l'eficiència d'un sistema “Apte” sense necessitat de ser administradors. La comparativa de velocitat i la proposta de millora permeten optimitzar tant el rendiment com l'estabilitat del PC.</p>
+
+    <h2>Integrants del grup</h2>
+    <ul>
+        <li>Nom 1</li>
+        <li>Nom 2</li>
+        <li>Nom 3</li>
+    </ul>
+</body>
+</html>
