@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informe Tècnic - Auditoria d'Eficiència SMX</title>
+    <title>El Bosc de les Ombres Mortes</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@400;600&display=swap');
+
         * {
             margin: 0;
             padding: 0;
@@ -12,927 +14,982 @@
         }
 
         :root {
-            --primary: #0f172a;
-            --secondary: #1e293b;
-            --accent: #06b6d4;
-            --accent-glow: rgba(6, 182, 212, 0.3);
-            --text: #e2e8f0;
-            --text-muted: #94a3b8;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --glass: rgba(30, 41, 59, 0.7);
+            --color-fons: #0a0a0a;
+            --color-text: #c4b8a8;
+            --color-text-dim: #7a6f5f;
+            --color-accent: #5a7a6a;
+            --color-llum: #8a9a8a;
+            --color-sombra: #1a1a1a;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
-            color: var(--text);
-            line-height: 1.6;
-            min-height: 100vh;
-            background-attachment: fixed;
+            font-family: 'Crimson Text', Georgia, serif;
+            background: var(--color-fons);
+            color: var(--color-text);
+            line-height: 1.9;
+            font-size: 1.15rem;
+            overflow-x: hidden;
         }
 
-        /* Animated background particles */
-        .bg-animation {
+        /* ========== PORTADA ========== */
+        .portada {
+            height: 100vh;
+            width: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .portada-imatge {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('assets/images/portada.jpg') center/cover no-repeat;
+            filter: brightness(0.7) contrast(1.1);
+            z-index: 1;
+        }
+
+        .portada-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(10,10,10,0.3) 0%,
+                rgba(10,10,10,0.6) 50%,
+                var(--color-fons) 100%
+            );
+            z-index: 2;
+        }
+
+        .portada-contingut {
+            position: relative;
+            z-index: 3;
+            padding: 2rem;
+            max-width: 800px;
+        }
+
+        .portada h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            color: #d4c9b8;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.9);
+            margin-bottom: 1rem;
+            letter-spacing: 0.1em;
+            line-height: 1.2;
+        }
+
+        .portada .subtitol {
+            font-size: 1.3rem;
+            color: var(--color-text-dim);
+            font-style: italic;
+            margin-bottom: 3rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
+
+        .fletxa-baix {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            animation: rebot 2s infinite;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+
+        .fletxa-baix:hover {
+            opacity: 1;
+        }
+
+        @keyframes rebot {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-15px); }
+            60% { transform: translateX(-50%) translateY(-7px); }
+        }
+
+        /* ========== PESTANYES D'IDIOMES ========== */
+        .pestanyes-container {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-sombra);
+            padding: 1rem 0;
+        }
+
+        .pestanyes {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .pestanya {
+            font-family: 'Cinzel', serif;
+            font-size: 0.95rem;
+            padding: 0.8rem 1.5rem;
+            background: transparent;
+            border: 1px solid var(--color-sombra);
+            color: var(--color-text-dim);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+            letter-spacing: 0.05em;
+        }
+
+        .pestanya:hover {
+            border-color: var(--color-accent);
+            color: var(--color-text);
+        }
+
+        .pestanya.active {
+            background: var(--color-accent);
+            border-color: var(--color-accent);
+            color: #d4c9b8;
+        }
+
+        /* ========== HISTÒRIA ========== */
+        .historia {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .idioma-content {
+            display: none;
+        }
+
+        .idioma-content.active {
+            display: block;
+        }
+
+        .capitol {
+            margin-bottom: 5rem;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s ease;
+        }
+
+        .capitol.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .capitol h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.6rem;
+            color: var(--color-llum);
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--color-sombra);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .capitol h2::before {
+            content: "◆";
+            color: var(--color-accent);
+            font-size: 0.8rem;
+        }
+
+        .capitol p {
+            margin-bottom: 1.8rem;
+            text-align: justify;
+            hyphens: auto;
+            color: var(--color-text);
+        }
+
+        .capitol p:first-of-type::first-letter {
+            font-size: 3.5rem;
+            float: left;
+            line-height: 0.8;
+            margin-right: 0.1em;
+            color: var(--color-llum);
+            font-family: 'Cinzel', serif;
+        }
+
+        /* ========== IMATGES ========== */
+        .moment-visual {
+            margin: 3rem 0;
+            position: relative;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 1.2s ease;
+        }
+
+        .moment-visual.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .moment-visual img {
+            width: 100%;
+            border-radius: 4px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            filter: sepia(20%) contrast(1.05);
+            transition: filter 0.5s;
+        }
+
+        .moment-visual:hover img {
+            filter: sepia(10%) contrast(1.1) brightness(1.05);
+        }
+
+        .moment-visual::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border: 1px solid rgba(90,122,106,0.2);
+            border-radius: 8px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .peu-imatge {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--color-text-dim);
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        /* ========== EFECTES ATMOSFÈRICS ========== */
+        .boira {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse at 20% 80%, rgba(100,120,100,0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(100,120,100,0.02) 0%, transparent 50%);
+            animation: drift 30s infinite linear;
+            z-index: 1000;
+            opacity: 0.6;
+        }
+
+        @keyframes drift {
+            from { transform: translateX(-50%); }
+            to { transform: translateX(0%); }
+        }
+
+        .particules {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden;
-            z-index: -1;
             pointer-events: none;
-        }
-
-        .particle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: var(--accent);
-            border-radius: 50%;
+            z-index: 999;
             opacity: 0.3;
-            animation: float 20s infinite linear;
         }
 
-        @keyframes float {
-            from { transform: translateY(100vh) translateX(0); }
-            to { transform: translateY(-10vh) translateX(100px); }
-        }
-
-        /* Header */
-        header {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 27, 75, 0.95));
-            backdrop-filter: blur(10px);
-            padding: 3rem 1rem;
-            text-align: center;
-            border-bottom: 1px solid var(--accent);
-            box-shadow: 0 4px 30px var(--accent-glow);
-            position: relative;
-            overflow: hidden;
-        }
-
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
-            animation: scan 3s infinite;
-        }
-
-        @keyframes scan {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #fff, var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.02em;
-        }
-
-        .subtitle {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            font-weight: 300;
-        }
-
-        .group-info {
-            margin-top: 1.5rem;
-            padding: 1rem;
-            background: var(--glass);
-            border-radius: 12px;
-            display: inline-block;
-            border: 1px solid rgba(6, 182, 212, 0.2);
-        }
-
-        .group-info span {
-            color: var(--accent);
-            font-weight: 600;
-        }
-
-        /* Main Container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
-        }
-
-        /* Section Cards */
-        section {
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            border-radius: 20px;
-            padding: 2.5rem;
-            margin-bottom: 2.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        section:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(6, 182, 212, 0.15);
-        }
-
-        section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(to bottom, var(--accent), transparent);
-        }
-
-        h2 {
-            color: var(--accent);
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-weight: 700;
-        }
-
-        h2::before {
-            content: '▹';
-            font-size: 1.5rem;
-        }
-
-        h3 {
-            color: var(--text);
-            font-size: 1.3rem;
-            margin: 1.5rem 0 1rem;
-            font-weight: 600;
-        }
-
-        /* Questionnaire */
-        .question {
-            background: rgba(15, 23, 42, 0.6);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            border-left: 4px solid var(--accent);
-            transition: all 0.3s ease;
-        }
-
-        .question:hover {
-            background: rgba(15, 23, 42, 0.8);
-            transform: translateX(5px);
-        }
-
-        .question-text {
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            color: var(--text);
-            font-size: 1.05rem;
-        }
-
-        .answer {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .badge {
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .badge.true {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--success);
-            border: 1px solid var(--success);
-        }
-
-        .badge.false {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--danger);
-            border: 1px solid var(--danger);
-        }
-
-        .justification {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-top: 0.5rem;
-            padding-left: 1rem;
-            border-left: 2px solid var(--secondary);
-        }
-
-        /* Process Analysis */
-        .process-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .process-card {
-            background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(15, 23, 42, 0.8));
-            border: 1px solid rgba(6, 182, 212, 0.3);
-            border-radius: 16px;
-            padding: 1.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .process-card::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-            opacity: 0.5;
-        }
-
-        .process-name {
-            font-weight: 700;
-            color: var(--accent);
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .process-detail {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        .warning-box {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid var(--warning);
-            border-radius: 12px;
-            padding: 1.25rem;
-            margin-top: 1.5rem;
-            display: flex;
-            align-items: start;
-            gap: 1rem;
-        }
-
-        .warning-box::before {
-            content: '⚠';
-            font-size: 1.5rem;
-            color: var(--warning);
-        }
-
-        /* Benchmarking */
-        .benchmark-container {
-            background: rgba(15, 23, 42, 0.8);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-top: 1.5rem;
-            border: 1px solid rgba(6, 182, 212, 0.2);
-        }
-
-        .command-box {
-            background: #0d1117;
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            padding: 1rem;
-            font-family: 'Courier New', monospace;
-            color: #7ee787;
-            margin: 1rem 0;
-            overflow-x: auto;
-            position: relative;
-        }
-
-        .command-box::before {
-            content: '$';
-            color: var(--accent);
-            margin-right: 0.5rem;
-        }
-
-        .speed-comparison {
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            margin: 2rem 0;
-            flex-wrap: wrap;
-            gap: 2rem;
-        }
-
-        .speed-item {
-            text-align: center;
-            padding: 1.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            min-width: 200px;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        .speed-item.reference {
-            border-color: var(--text-muted);
-        }
-
-        .speed-item.ours {
-            border-color: var(--success);
-            background: rgba(16, 185, 129, 0.1);
-            position: relative;
-        }
-
-        .speed-item.ours::after {
-            content: '✓';
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background: var(--success);
-            color: white;
-            width: 30px;
-            height: 30px;
+        /* ========== CONTROLS D'ÀUDIO ========== */
+        .audio-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 2000;
+            background: rgba(20, 25, 20, 0.95);
+            border: 1px solid var(--color-accent);
             border-radius: 50%;
+            width: 60px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
 
-        .speed-value {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--accent);
-            display: block;
+        .audio-control:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(90,122,106,0.3);
         }
 
-        .speed-label {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-        }
-
-        .improvement-badge {
-            background: linear-gradient(135deg, var(--success), #059669);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-weight: 700;
-            margin-top: 1rem;
-            display: inline-block;
+        .audio-control.active {
+            background: rgba(90,122,106,0.2);
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            0%, 100% { box-shadow: 0 0 0 0 rgba(90,122,106,0.4); }
+            50% { box-shadow: 0 0 0 15px rgba(90,122,106,0); }
         }
 
-        /* Hardware Proposal */
-        .proposal-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
+        .audio-control svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--color-llum);
+            fill: none;
+            stroke-width: 2;
         }
 
-        .proposal-card {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 27, 75, 0.9));
-            border-radius: 16px;
-            padding: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
+        .audio-control.mute svg {
+            stroke: var(--color-text-dim);
         }
 
-        .proposal-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent);
-            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.2);
-        }
-
-        .proposal-number {
-            width: 40px;
-            height: 40px;
-            background: var(--accent);
-            color: var(--primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-        }
-
-        .proposal-title {
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 0.75rem;
-            font-size: 1.1rem;
-        }
-
-        .proposal-desc {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        .budget-box {
-            background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(6, 182, 212, 0.05));
-            border: 2px solid var(--accent);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-top: 2rem;
-            text-align: center;
-        }
-
-        .budget-amount {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--accent);
-            text-shadow: 0 0 20px var(--accent-glow);
-        }
-
-        /* PC Comparison Chart */
-        .comparison-chart {
-            background: rgba(15, 23, 42, 0.8);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-top: 1.5rem;
-        }
-
-        .chart-container {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .chart-row {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .chart-label {
-            min-width: 100px;
-            font-weight: 600;
-            color: var(--text-muted);
-        }
-
-        .chart-bar-container {
-            flex: 1;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .chart-bar {
-            height: 100%;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 1rem;
-            font-weight: 700;
-            transition: width 1s ease-out;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .chart-bar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        .chart-bar.pc1 {
-            width: 85%;
-            background: linear-gradient(90deg, var(--danger), #dc2626);
-        }
-
-        .chart-bar.pc2 {
-            width: 100%;
-            background: linear-gradient(90deg, var(--success), #059669);
-        }
-
-        .analysis-text {
-            margin-top: 1.5rem;
-            padding: 1.5rem;
-            background: rgba(245, 158, 11, 0.1);
-            border-left: 4px solid var(--warning);
-            border-radius: 8px;
-            color: var(--text);
-            line-height: 1.6;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 3rem 1rem;
-            color: var(--text-muted);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            margin-top: 3rem;
-            background: rgba(15, 23, 42, 0.5);
-        }
-
-        .tech-stack {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .tech-badge {
-            background: rgba(6, 182, 212, 0.1);
-            color: var(--accent);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
+        .indicador-audio {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            background: rgba(20, 25, 20, 0.9);
+            padding: 0.8rem 1.2rem;
+            border-radius: 4px;
+            border: 1px solid var(--color-sombra);
             font-size: 0.85rem;
-            border: 1px solid rgba(6, 182, 212, 0.3);
+            color: var(--color-text-dim);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s;
+            pointer-events: none;
+            z-index: 2000;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            h1 { font-size: 1.8rem; }
-            section { padding: 1.5rem; }
-            .speed-comparison { flex-direction: column; }
-            .chart-row { flex-direction: column; align-items: flex-start; }
-            .chart-label { min-width: auto; }
+        .indicador-audio.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        /* Print styles */
-        @media print {
-            body { background: white; color: black; }
-            section { break-inside: avoid; page-break-inside: avoid; }
-            .bg-animation { display: none; }
+        /* ========== FI DE LA HISTÒRIA ========== */
+        .epilog {
+            text-align: center;
+            padding: 4rem 2rem;
+            border-top: 1px solid var(--color-sombra);
+            margin-top: 3rem;
+            font-style: italic;
+            color: var(--color-text-dim);
         }
+
+        .epilog::before {
+            content: "❦";
+            display: block;
+            font-size: 2rem;
+            color: var(--color-accent);
+            margin-bottom: 2rem;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 600px) {
+            .historia {
+                padding: 2rem 1.5rem;
+            }
+
+            .capitol p:first-of-type::first-letter {
+                font-size: 2.5rem;
+            }
+
+            .audio-control {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+            }
+
+            .pestanyes {
+                gap: 0.3rem;
+            }
+
+            .pestanya {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Scrollbar personalitzada */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--color-fons);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-sombra);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--color-accent);
+        }
+    
+        /* ========== RESUM ========== */
+        .resum-section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(20, 20, 20, 0.5);
+            border-left: 3px solid var(--color-accent);
+            border-radius: 0 8px 8px 0;
+        }
+
+        .resum-section h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            color: var(--color-llum);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .resum-section h3::before {
+            content: "◈";
+            color: var(--color-accent);
+        }
+
+        .resum-section p {
+            text-align: justify;
+            hyphens: auto;
+            line-height: 1.8;
+            color: var(--color-text);
+        }
+
     </style>
 </head>
 <body>
-    <div class="bg-animation" id="particles"></div>
 
-    <header>
-        <h1>Informe Tècnic d'Auditoria d'Eficiència</h1>
-        <p class="subtitle">Activitat 4.6 - Sistemes Microinformàtics i Xarxes (SMX)</p>
-        <div class="group-info">
-            <span>Integrants del Grup:</span> Jose Ramon Huertas, Joan Gomila, Angelo Ferragut, Maria Isabel Morillas
+    <!-- Efectes atmosfèrics -->
+    <div class="boira"></div>
+    <canvas class="particules" id="particules"></canvas>
+
+    <!-- PORTADA -->
+    <header class="portada" id="inici">
+        <div class="portada-imatge"></div>
+        <div class="portada-overlay"></div>
+        <div class="portada-contingut">
+            <h1>El Bosc de les Ombres Mortes</h1>
+            <p class="subtitol">Una història de por, perseverança i transformació</p>
+        </div>
+        <div class="fletxa-baix" onclick="document.getElementById('historia').scrollIntoView({behavior: 'smooth'})">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 5v14M19 12l-7 7-7-7"/>
+            </svg>
         </div>
     </header>
 
-    <div class="container">
-        <!-- Sección 1: Cuestionario -->
-        <section id="cuestionario">
-            <h2>1. Anàlisi Teòric: Verdader o Fals</h2>
-            
-            <div class="question">
-                <div class="question-text">En el benchmarking, el color dels components o el màrqueting del fabricant són paràmetres racionals que hem de tenir en compte.</div>
-                <div class="answer">
-                    <span class="badge false">Fals</span>
-                </div>
-                <div class="justification">
-                    L'únic aspecte realment important és la nota que obté el hardware. No hem de tenir en compte la marca ni el color, ja que no afecten de manera directa al rendiment del sistema.
-                </div>
-            </div>
-
-            <div class="question">
-                <div class="question-text">Windows 11 es pot instal·lar sense clau de producte i activar-lo més tard.</div>
-                <div class="answer">
-                    <span class="badge true">Vertader</span>
-                </div>
-                <div class="justification">
-                    Microsoft permet la instal·lació de Windows 11 sense clau de producte, funcionant en mode limitat fins a la seva posterior activació.
-                </div>
-            </div>
-
-            <div class="question">
-                <div class="question-text">L'eina smartctl a Linux serveix per mesurar la velocitat de la targeta de xarxa.</div>
-                <div class="answer">
-                    <span class="badge false">Fals</span>
-                </div>
-                <div class="justification">
-                    L'eina smartctl serveix per monitoritzar i provar dispositius d'emmagatzematge SATA/ATA (discos durs i SSDs), no targetes de xarxa.
-                </div>
-            </div>
-
-            <div class="question">
-                <div class="question-text">Tiny Core Linux és una distribució que s'executa completament des de la RAM i ocupa només uns 23 MB.</div>
-                <div class="answer">
-                    <span class="badge true">Vertader</span>
-                </div>
-                <div class="justification">
-                    És una distribució de Linux extremadament lleugera i minimalista, dissenyada per arrencar ràpidament i funcionar gairebé totalment en memòria RAM, ocupant menys de 25 MB en la seva versió base.
-                </div>
-            </div>
-
-            <div class="question">
-                <div class="question-text">Per instal·lar Windows 11, cal un processador de 64 bits, mínim 4 GB de RAM i TPM versió 2.0.</div>
-                <div class="answer">
-                    <span class="badge true">Vertader</span>
-                </div>
-                <div class="justification">
-                    Aquests són els requisits mínims oficials de Microsoft per a la instal·lació de Windows 11, incloent el xip de seguretat TPM 2.0.
-                </div>
-            </div>
-
-            <div class="question">
-                <div class="question-text">Quina comanda de Linux faries servir per veure en temps real quin procés consumeix més CPU o RAM?</div>
-                <div class="answer">
-                    <span class="badge true">Resposta</span>
-                </div>
-                <div class="justification">
-                    La comanda més habitual és <code>htop</code>, que proporciona una interfície interactiva i visual per monitoritzar processos en temps real.
-                </div>
-            </div>
-
-            <div class="question">
-                <div class="question-text">Si un equip de marca (com HP o Dell) porta la clau de Windows integrada a la BIOS, com s'anomena aquesta llicència?</div>
-                <div class="answer">
-                    <span class="badge true">Resposta</span>
-                </div>
-                <div class="justification">
-                    Es tracta d'una llicència <strong>OEM</strong> (Original Equipment Manufacturer), vinculada al hardware específic de l'equip.
-                </div>
-            </div>
-
-            <div class="question">
-                <div class="question-text">Segons la documentació del muntatge, quins dos tipus de documentació cal preparar al final del procés?</div>
-                <div class="answer">
-                    <span class="badge true">Resposta</span>
-                </div>
-                <div class="justification">
-                    Cal fer un <strong>informe tècnic</strong> i una <strong>fitxa tècnica</strong> detallant el procés i les especificacions.
-                </div>
-            </div>
-
-            <div class="question">
-                <div class="question-text">A la fase de benchmarking, què hem de fer si els resultats d'una prova semblen fora de lloc?</div>
-                <div class="answer">
-                    <span class="badge true">Resposta</span>
-                </div>
-                <div class="justification">
-                    Cal <strong>tornar a fer la prova</strong> per verificar la consistència o bé <strong>fer una prova diferent</strong> per contrastar resultats.
-                </div>
-            </div>
-        </section>
-
-        <!-- Sección 2: Neteja de Processos -->
-        <section id="processos">
-            <h2>2. Neteja i Optimització de Processos d'Usuari</h2>
-            
-            <h3>🔍 Identificació de Processos Consumidors</h3>
-            <p>Utilitzant <code>htop</code> des de la terminal, s'han identificat els següents processos com els principals consumidors de recursos:</p>
-            
-            <div class="process-grid">
-                <div class="process-card">
-                    <div class="process-name">Cinnamon</div>
-                    <div class="process-detail">Entorn d'escriptori - Alt consum de RAM i CPU per efectes visuals</div>
-                </div>
-                <div class="process-card">
-                    <div class="process-name">Xorg</div>
-                    <div class="process-detail">Servidor gràfic - Gestió de pantalla i perifèrics d'entrada</div>
-                </div>
-                <div class="process-card">
-                    <div class="process-name">Chrome</div>
-                    <div class="process-detail">Navegador web - Múltiples processos per pestanyes i extensions</div>
-                </div>
-                <div class="process-card">
-                    <div class="process-name">Veyon-S+</div>
-                    <div class="process-detail">Software de control d'aula - Monitorització en segon pla</div>
-                </div>
-            </div>
-
-            <div class="warning-box">
-                <div>
-                    <strong>Observació Crítica:</strong> En aturar el procés <code>cinnamon (PID 1953)</code> mitjançant la tecla 'k' a htop o la comanda <code>kill</code>, el sistema operatiu es corromp completament, demostrant que és un procés crític per a l'entorn gràfic.
-                </div>
-            </div>
-
-            <h3>💡 Estratègia d'Alliberament de RAM</h3>
-            <p>Deixant el sistema amb la mínima càrrega de RAM des de l'entorn d'usuari:</p>
-            <ul style="margin-left: 2rem; color: var(--text-muted); line-height: 2;">
-                <li>El sistema alliberarà memòria de programes en segon pla i memòria cau</li>
-                <li>No es tancaran processos crítics del sistema</li>
-                <li>Es guanya memòria disponible però possiblement amb certa lentitud inicial en reobrir aplicacions</li>
-                <li>Les aplicacions hauran de recarregar-se des de zero</li>
-            </ul>
-        </section>
-
-        <!-- Sección 3: Benchmarking -->
-        <section id="benchmarking">
-            <h2>3. Benchmarking de Velocitat d'Escriptura</h2>
-            
-            <div class="benchmark-container">
-                <h3>🧪 Metodologia de Prova</h3>
-                <p>Com que no podem escriure al disc a nivell de sistema, hem provat la velocitat des de la perspectiva de l'usuari amb la següent comanda:</p>
-                
-                <div class="command-box">
-                    dd if=/dev/zero of=testfile bs=1G count=1 oflag=dsync
-                </div>
-                
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">
-                    <em>Nota: Després de la prova, s'executa <code>rm testfile</code> per alliberar espai de disc.</em>
-                </p>
-
-                <h3 style="margin-top: 2rem;">📊 Resultats Comparatius</h3>
-                <div class="speed-comparison">
-                    <div class="speed-item reference">
-                        <span class="speed-value">779 MB/s</span>
-                        <div class="speed-label">PC de Referència<br>(Pràctica Anterior)</div>
-                    </div>
-                    <div class="speed-item ours">
-                        <span class="speed-value" style="color: var(--success);">1,1 GB/s</span>
-                        <div class="speed-label">El Nostre PC<br>(Aula Actual)</div>
-                    </div>
-                </div>
-
-                <div style="text-align: center;">
-                    <span class="improvement-badge">+41% més ràpid</span>
-                </div>
-
-                <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(16, 185, 129, 0.1); border-radius: 12px; border-left: 4px solid var(--success);">
-                    <strong>Justificació Tècnica:</strong> El nostre equip supera en un 41% la velocitat de referència, indicant un subsistema d'emmagatzematge més modern (probablement NVMe de nova generació vs. SATA SSD o NVMe anterior) o menys càrrega de sistema durant la prova.
-                </div>
-            </div>
-        </section>
-
-        <!-- Sección 4: Propuesta de Mejora -->
-        <section id="proposta">
-            <h2>4. Proposta de Millora de Maquinari</h2>
-            
-            <p style="margin-bottom: 1.5rem; color: var(--text-muted);">
-                <strong>Situació:</strong> PC amb Intel i5-10400, 16GB RAM, 1TB NVMe. Problemes detectats: temperatures superiors a 60ºC sota càrrega i errors de software amb congelaments del ratolí.
-            </p>
-
-            <div class="proposal-grid">
-                <div class="proposal-card">
-                    <div class="proposal-number">1</div>
-                    <div class="proposal-title">Millora de Ventilació</div>
-                    <div class="proposal-desc">
-                        <strong>Solució:</strong> Instal·lació d'un dissipador de CPU tipus torre amb ventilador de 120mm (ex: Cooler Master Hyper 212 o similar).
-                        <br><br>
-                        <strong>Benefici:</strong> Reducció de 10-15ºC sota càrrega, mantenint el sistema per sota dels 60ºC.
-                    </div>
-                </div>
-
-                <div class="proposal-card">
-                    <div class="proposal-number">2</div>
-                    <div class="proposal-title">Alternativa de Software Lleuger</div>
-                    <div class="proposal-desc">
-                        <strong>Recomanació:</strong> Migració a <strong>Lubuntu</strong> o <strong>antiX</strong>.
-                        <br><br>
-                        <strong>Benefici:</strong> Consum inferior a 1GB de RAM en repòs, alliberant recursos per evitar congelaments del ratolí i millorar la resposta general del sistema.
-                    </div>
-                </div>
-
-                <div class="proposal-card">
-                    <div class="proposal-number">3</div>
-                    <div class="proposal-title">Ampliació de RAM (Opcional)</div>
-                    <div class="proposal-desc">
-                        <strong>Solució:</strong> Afegir 8GB addicionals (si hi ha slot lliure) o substituir per kit de 32GB.
-                        <br><br>
-                        <strong>Benefici:</strong> Major marge per a multitasca i aplicacions intensives, tot i que 16GB són suficients per a la majoria de tasques.
-                    </div>
-                </div>
-            </div>
-
-            <div class="budget-box">
-                <div class="proposal-title" style="color: var(--text-muted); margin-bottom: 0.5rem;">Pressupost Total Estimat</div>
-                <div class="budget-amount">&lt; 100€</div>
-                <p style="color: var(--text-muted); margin-top: 1rem;">
-                    Dissipador: ~30-40€ | Ventiladors addicionals: ~20€ | Thermal paste: ~10€<br>
-                    Software: 0€ (codi obert)
-                </p>
-            </div>
-        </section>
-
-        <!-- Sección 5: Comparativa PC -->
-        <section id="comparativa">
-            <h2>5. Anàlisi Comparativa: PC1 vs PC2</h2>
-            
-            <div class="comparison-chart">
-                <div class="chart-container">
-                    <div class="chart-row">
-                        <div class="chart-label">PC1 (PC12)</div>
-                        <div class="chart-bar-container">
-                            <div class="chart-bar pc1" style="width: 85%;">i5-10400</div>
-                        </div>
-                    </div>
-                    <div style="font-size: 0.9rem; color: var(--text-muted); margin-left: 100px; margin-bottom: 1rem;">
-                        16GB RAM | 1TB NVMe | Problemes d'estabilitat
-                    </div>
-
-                    <div class="chart-row">
-                        <div class="chart-label">PC2 (PC11)</div>
-                        <div class="chart-bar-container">
-                            <div class="chart-bar pc2" style="width: 100%;">i5-11400</div>
-                        </div>
-                    </div>
-                    <div style="font-size: 0.9rem; color: var(--text-muted); margin-left: 100px;">
-                        16GB RAM | 1TB NVMe | Rendiment estable
-                    </div>
-                </div>
-
-                <div class="analysis-text">
-                    <strong>Anàlisi Tècnica:</strong><br>
-                    Teòricament, el PC2 (i5-11400) només té un ~15% més d'IPC (Instruccions Per Cicle) respecte al PC1 (i5-10400), la qual cosa no hauria de suposar una diferència significativa en condicions normals.<br><br>
-                    
-                    No obstant, el <strong>PC1 presenta problemes de rendiment i estabilitat</strong> (sobrecalfament i congelaments), que impliquen una diferència notòria en l'experiència d'ús real. Això suggereix que el coll d'ampolla no és la CPU en si, sinó:
-                    <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
-                        <li>Thermal throttling per mala ventilació</li>
-                        <li>Software pesat que consumeix recursos (Cinnamon vs. entorns més lleugers)</li>
-                        <li>Possible degradació de la pasta tèrmica o obstrucció de vents</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Sección 6: Conclusiones -->
-        <section id="conclusions">
-            <h2>6. Conclusions i Certificat Tècnic</h2>
-            
-            <p style="line-height: 1.8; color: var(--text-muted);">
-                Mitjançant aquesta auditoria, hem demostrat que encara que no tinguem permisos d'administrador, podem:
-            </p>
-            
-            <ul style="margin: 1.5rem 0; margin-left: 2rem; line-height: 2; color: var(--text);">
-                <li>Identificar processos consumidors de recursos mitjançant <code>htop</code></li>
-                <li>Realitzar proves de rendiment comparatives amb <code>dd</code></li>
-                <li>Proposar millores de hardware realistes sota pressupost</li>
-                <li>Diferenciar entre problemes de hardware (temperatura) i software (consum de RAM)</li>
-            </ul>
-
-            <div style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(6, 182, 212, 0.05)); border: 2px solid var(--accent); border-radius: 16px; padding: 2rem; text-align: center; margin-top: 2rem;">
-                <h3 style="color: var(--accent); margin-bottom: 1rem;">✓ Sistema Certificat</h3>
-                <p style="color: var(--text);">
-                    El sistema ha passat per un procés d'optimització i anàlisi exhaustiu.<br>
-                    <strong>Estat final:</strong> Sistema net amb mínima càrrega de RAM des de l'entorn d'usuari.
-                </p>
-            </div>
-        </section>
+    <!-- PESTANYES D'IDIOMES -->
+    <div class="pestanyes-container">
+        <div class="pestanyes">
+            <button class="pestanya active" data-idioma="ca">Català</button>
+            <button class="pestanya" data-idioma="es">Castellano</button>
+            <button class="pestanya" data-idioma="en">English</button>
+            <button class="pestanya" data-idioma="resum">Resum</button>
+        </div>
     </div>
 
-    <footer>
-        <p>Informe generat per a l'Activitat 4.6 - SMX</p>
-        <div class="tech-stack">
-            <span class="tech-badge">HTML5</span>
-            <span class="tech-badge">CSS3</span>
-            <span class="tech-badge">Linux</span>
-            <span class="tech-badge">Benchmarking</span>
-            <span class="tech-badge">htop</span>
+    <!-- HISTÒRIA -->
+    <main class="historia" id="historia">
+
+        <!-- CATALÀ -->
+        <div class="idioma-content active" id="content-ca">
+            <!-- CAPÍTOL 1: La Pèrdua -->
+            <article class="capitol" data-cap="1">
+                <h2>La Pèrdua</h2>
+
+                <p>L'Elna no sabia exactament quan s'havia perdut. No hi havia hagut un trencament brusc, ni un camí que s'acabés de cop. Simplement, la claror s'havia tornat d'un verd malaltís i la sentor de molsa humida s'havia tornat tan densa que semblava que es pogués mastegar. Als seus dotze anys, l'Elna sabia que el bosc no la volia devorar, però sí que volia que es quedés. Volia que fos una estàtua més en aquell museu de fusta i silenci.</p>
+
+                <p>L'aire era immòbil, d'una quietud artificial. A terra, les fulles seques no cruixien sota els seus peus; s'enfonsaven en un llit de podridura silenciosa. Malgrat la manca de vent, les branques més altes de les alzines es cargolaven entre elles, com dits d'ancians que miren de recordar una carícia.</p>
+
+                <!-- IMATGE 1: El bedoll -->
+                <figure class="moment-visual" data-img="1">
+                    <img src="assets/images/moment1.jpg" alt="El bedoll amb l'ull">
+                    <figcaption class="peu-imatge">El bedoll que observa</figcaption>
+                </figure>
+
+                <p>L'Elna es va aturar davant d'un bedoll de tronc blanc tacat de negre. Ja l'havia vist. Tres vegades. El reconeixia per la ferida en forma d'ull que s'obria a l'escorça, una mirada de fusta que semblava jutjar la seva indecisió.</p>
+
+                <p>—No estic fent cercles —va xiuxiuejar, més per sentir la seva pròpia veu que per convicció.</p>
+
+                <p>Però el bosc li va respondre amb la seva primera trampa. La seva pròpia veu va tornar a ella, però deformada. No era un eco, era una paròdia.</p>
+
+                <p><em>"...no estic... no sóc... no puc..."</em>, van moure's les ombres entre els arbustos.</p>
+
+                <p>L'Elna va tancar els ulls. Aquí és on la seva màgia, aquella flama tènue que el seu avi anomenava La Perseverança, començava a bategar sota la seva pell. No era una màgia de llum radiant ni de boles de foc; era una resistència sorda, una capacitat de filtrar la realitat de l'engany. Va posar la mà sobre el seu pit i va sentir el seu propi cor, l'únic rellotge fiable en aquell indret on el temps semblava haver-se dissolt en la boira.</p>
+            </article>
+
+            <!-- CAPÍTOL 2: El Mirall de les Veus -->
+            <article class="capitol" data-cap="2">
+                <h2>El Mirall de les Veus</h2>
+
+                <p>Mentre caminava, la bruma va començar a filtrar-se entre els troncs com un gas fred. No era blanca, sinó d'un gris cendra que ho desdibuixava tot. L'Elna va veure siluetes. Allà, entre dos roures colossals, semblava haver-hi la figura de la seva mare, d'esquena, cosint amb fils que eren teranyines.</p>
+
+                <p>—Mare? —va dir, tot i sabent que era impossible.</p>
+
+                <p><em>"Encara no ets prou bona, Elna"</em>, va dir la figura sense girar-se. La veu no venia de la silueta, sinó de sota terra, com si les arrels parlessin. <em>"T'has perdut perquè sempre has tingut por de decidir. Ets un ocell sense ales, una bruixa sense vareta. Què penses fer quan la nit caigui del tot?"</em></p>
+
+                <!-- IMATGE 2: La figura -->
+                <figure class="moment-visual" data-img="2">
+                    <img src="assets/images/moment2.jpg" alt="La figura de la mare">
+                    <figcaption class="peu-imatge">La trampa del bosc</figcaption>
+                </figure>
+
+                <p>L'Elna va sentir una punxada al pit, una fredor que no era climàtica. Era el dubte. El bosc no utilitzava urpes, utilitzava els seus propis records, les inseguretats que guardava sota el llit abans d'anar a dormir. Les veus es van multiplicar. Eren les veus dels nens de la vila rient-se d'ella, la veu del seu mestre dient que la seva màgia era <em>"massa subtil per ser útil"</em>.</p>
+
+                <p>—Prou —va dir l'Elna, plantant els peus a terra.</p>
+
+                <p>Va activar la seva percepció. Va deixar d'escoltar les paraules i va començar a "sentir" l'origen del so. No eren veus humanes; era el fregadís de les fulles seques manipulat per la seva pròpia por. Amb un esforç de voluntat, va imaginar una paret de vidre transparent al voltant del seu cor. Les veus colpejaven el vidre i es trencaven com onades contra un penya-segat.</p>
+
+                <p>El bosc, enrabiat per la seva resistència, va canviar de tàctica. Els arbres van començar a moure's. No corrien, però quan l'Elna parpellejava, els troncs s'havien desplaçat uns centímetres, tancant l'espai, reduint el camí fins que gairebé havia de caminar de costat.</p>
+            </article>
+
+            <!-- CAPÍTOL 3: La Prova del Buit -->
+            <article class="capitol" data-cap="3">
+                <h2>La Prova del Buit</h2>
+
+                <p>Va arribar a una clariana on la llum del sol, o el que en quedava, es filtrava en raigs morats i oblics. Al centre, un estany d'aigües negres i immòbils l'esperava. L'Elna sabia que havia d'arribar a l'altre costat, però no hi havia pont, i l'aigua semblava no tenir fons.</p>
+
+                <p>Es va asseure a la vora. De sobte, la soledat la va colpejar amb tota la seva força. No hi havia ningú per salvar-la. Si es quedava allà, es convertiria en una part més del paisatge, una estàtua de molsa i ossos. La tristesa era una boira més pesant que la del bosc. Va recordar totes les vegades que s'havia sentit invisible al món exterior.</p>
+
+                <!-- IMATGE 3: L'estany -->
+                <figure class="moment-visual" data-img="3">
+                    <img src="assets/images/moment3.jpg" alt="L'estany negre">
+                    <figcaption class="peu-imatge">El mirall de les pors</figcaption>
+                </figure>
+
+                <p><em>"Si ningú et veu, existeixes realment?"</em>, va preguntar el bosc amb un xiuxiueig de vent inexistent.</p>
+
+                <p>L'Elna va mirar el seu reflex a l'aigua negra. No va veure la seva cara, sinó un buit. Durant un moment, va estar a punt de deixar-se caure, d'acceptar que el bosc tenia raó. Però llavors va notar una petita vibració als dits. Era la seva màgia de percepció, captant alguna cosa que el bosc intentava amagar.</p>
+
+                <p>Sota la capa de por i sota l'aigua negra, hi havia una veritat: el bosc no era un enemic a vèncer, sinó un mirall que calia travessar.</p>
+
+                <p>Va tancar els ulls i, en lloc d'intentar veure amb la vista, va veure amb la seva resistència. Va percebre que el camí no estava "davant" seu, sinó "dins". El bosc s'alimentava de la seva reacció. Si ella deixava de reaccionar amb por, el bosc perdia la seva forma.</p>
+
+                <p>Va fer un pas cap a l'aigua. No es va enfonsar. La superfície era sòlida com el gel, malgrat que encara semblava líquida i fosca. Va caminar sobre el mirall de les seves pròpies pors, cada pas una afirmació de la seva existència. No necessitava que ningú la vegués per saber que era allà.</p>
+            </article>
+
+            <!-- CAPÍTOL 4: La Sortida -->
+            <article class="capitol" data-cap="4">
+                <h2>La Sortida sense Retorn</h2>
+
+                <p>Quan va arribar a l'altra riba, el bosc va fer un últim intent. Els arbres van començar a plorar una saba negra i espessa, i l'aire es va tornar tan fred que l'alè de l'Elna es cristal·litzava davant seu. Però ella ja no mirava les ombres. Mantenia la seva màgia activa, una armadura invisible que repel·lia la desesperació.</p>
+
+                <p>A poc a poc, la densitat de la vegetació va anar disminuint. La llum va canviar d'aquell lila opressiu a un gris albada, més natural, més honest. Els ocells, els de veritat, van començar a cantar en algun lloc llunyà.</p>
+
+                <p>L'Elna va sortir del perímetre dels arbres més antics i es va trobar en un prat de gramínies altes, banyades per la rosada. Es va girar per mirar enrere. El bosc semblava ara una taca fosca i silenciosa sota el cel de matinada, imperturbable, guardant els seus secrets per al pròxim viatger.</p>
+
+                <p>No se sentia victoriosa en el sentit clàssic. No portava cap tresor, ni havia après cap conjur nou. Però, quan es va mirar les mans, va notar que les puntes dels seus dits tenien una lleu claror argentada que no marxava. La seva màgia ja no era només una eina de defensa; s'havia integrat en ella, transformant la seva manera de veure el món.</p>
+
+                <p>Havia entrat al bosc com una nena que temia la seva pròpia ombra i en sortia com algú que sabia que l'ombra era només una part de la llum. El camí cap a casa encara era llarg i el bosc de les veus seguiria allà, esperant a la frontera de la realitat. L'Elna va començar a caminar, sabent que, encara que el misteri del bosc no s'hagués resolt, ella ja no era la mateixa que s'hi havia perdut.</p>
+            </article>
+
+            <div class="epilog">
+                <p>Fi</p>
+            </div>
         </div>
-        <p style="margin-top: 1rem; font-size: 0.9rem;">
-            Data: 24 de Febrer de 2026
-        </p>
-    </footer>
+
+        <!-- CASTELLANO -->
+        <div class="idioma-content" id="content-es">
+            <!-- CAPÍTULO 1: La Pérdida -->
+            <article class="capitol" data-cap="1">
+                <h2>La Pérdida</h2>
+
+                <p>Elna no sabía exactamente cuándo se había perdido. No había habido una ruptura brusca, ni un camino que terminara de golpe. Simplemente, la claridad se había vuelto de un verde enfermizo y el olor a musgo húmedo se había tornado tan denso que parecía que se pudiera masticar. A sus doce años, Elna sabía que el bosque no quería devorarla, pero sí que quería que se quedara. Quería que fuera una estatua más en aquel museo de madera y silencio.</p>
+
+                <p>El aire era inmóvil, de una quietud artificial. En el suelo, las hojas secas no crujían bajo sus pies; se hundían en un lecho de podredumbre silenciosa. A pesar de la falta de viento, las ramas más altas de los robles se enroscaban entre sí, como dedos de ancianos que intentan recordar una caricia.</p>
+
+                <figure class="moment-visual" data-img="1">
+                    <img src="assets/images/moment1.jpg" alt="El abedul que observa">
+                    <figcaption class="peu-imatge">El abedul que observa</figcaption>
+                </figure>
+
+                <p>Elna se detuvo frente a un abedul de tronco blanco manchado de negro. Ya lo había visto. Tres veces. Lo reconocía por la herida en forma de ojo que se abría en la corteza, una mirada de madera que parecía juzgar su indecisión.</p>
+
+                <p>—No estoy dando círculos —susurró, más por escuchar su propia voz que por convicción.</p>
+
+                <p>Pero el bosque le respondió con su primera trampa. Su propia voz volvió a ella, pero deformada. No era un eco, era una parodia.</p>
+
+                <p><em>"...no estoy... no soy... no puedo..."</em>, se movieron las sombras entre los arbustos.</p>
+
+                <p>Elna cerró los ojos. Aquí es donde su magia, aquella llama tenue que su abuelo llamaba La Perseverancia, comenzaba a latir bajo su piel. No era una magia de luz radiante ni de bolas de fuego; era una resistencia sorda, una capacidad de filtrar la realidad del engaño. Puso la mano sobre su pecho y sintió su propio corazón, el único reloj fiable en aquel lugar donde el tiempo parecía haberse disuelto en la niebla.</p>
+            </article>
+
+            <!-- CAPÍTULO 2: El Espejo de las Voces -->
+            <article class="capitol" data-cap="2">
+                <h2>El Espejo de las Voces</h2>
+
+                <p>Mientras caminaba, la bruma comenzó a filtrarse entre los troncos como un gas frío. No era blanca, sino de un gris ceniza que lo desdibujaba todo. Elna vio siluetas. Allí, entre dos robles colosales, parecía haber la figura de su madre, de espaldas, cosiendo con hilos que eran telarañas.</p>
+
+                <p>—¿Mamá? —dijo, aun sabiendo que era imposible.</p>
+
+                <p><em>"Aún no eres lo suficientemente buena, Elna"</em>, dijo la figura sin girarse. La voz no venía de la silueta, sino de debajo de la tierra, como si las raíces hablaran. <em>"Te has perdido porque siempre has tenido miedo de decidir. Eres un pájaro sin alas, una bruja sin varita. ¿Qué piensas hacer cuando la noche caiga del todo?"</em></p>
+
+                <figure class="moment-visual" data-img="2">
+                    <img src="assets/images/moment2.jpg" alt="La figura de la madre">
+                    <figcaption class="peu-imatge">La trampa del bosque</figcaption>
+                </figure>
+
+                <p>Elna sintió una punzada en el pecho, una frialdad que no era climática. Era la duda. El bosque no utilizaba garras, utilizaba sus propios recuerdos, las inseguridades que guardaba bajo la cama antes de irse a dormir. Las voces se multiplicaron. Eran las voces de los niños del pueblo riéndose de ella, la voz de su maestro diciendo que su magia era <em>"demasiado sutil para ser útil"</em>.</p>
+
+                <p>—Basta —dijo Elna, plantando los pies en el suelo.</p>
+
+                <p>Activó su percepción. Dejó de escuchar las palabras y comenzó a "sentir" el origen del sonido. No eran voces humanas; era el roce de las hojas secas manipulado por su propio miedo. Con un esfuerzo de voluntad, imaginó una pared de cristal transparente alrededor de su corazón. Las voces golpeaban el cristal y se rompían como olas contra un acantilado.</p>
+
+                <p>El bosque, enfurecido por su resistencia, cambió de táctica. Los árboles comenzaron a moverse. No corrían, pero cuando Elna parpadeaba, los troncos se habían desplazado unos centímetros, cerrando el espacio, reduciendo el camino hasta que casi tenía que caminar de lado.</p>
+            </article>
+
+            <!-- CAPÍTULO 3: La Prueba del Vacío -->
+            <article class="capitol" data-cap="3">
+                <h2>La Prueba del Vacío</h2>
+
+                <p>Llegó a una clara donde la luz del sol, o lo que quedaba de ella, se filtraba en rayos morados y oblicuos. En el centro, un estanque de aguas negras e inmóviles la esperaba. Elna sabía que tenía que llegar al otro lado, pero no había puente, y el agua parecía no tener fondo.</p>
+
+                <p>Se sentó a la orilla. De repente, la soledad la golpeó con toda su fuerza. No había nadie para salvarla. Si se quedaba allí, se convertiría en una parte más del paisaje, una estatua de musgo y huesos. La tristeza era una niebla más pesada que la del bosque. Recordó todas las veces que se había sentido invisible en el mundo exterior.</p>
+
+                <figure class="moment-visual" data-img="3">
+                    <img src="assets/images/moment3.jpg" alt="El estanque negro">
+                    <figcaption class="peu-imatge">El espejo de los miedos</figcaption>
+                </figure>
+
+                <p><em>"Si nadie te ve, ¿existes realmente?"</em>, preguntó el bosque con un susurro de viento inexistente.</p>
+
+                <p>Elna miró su reflejo en el agua negra. No vio su cara, sino un vacío. Durante un momento, estuvo a punto de dejarse caer, de aceptar que el bosque tenía razón. Pero entonces notó una pequeña vibración en los dedos. Era su magia de percepción, captando algo que el bosque intentaba ocultar.</p>
+
+                <p>Bajo la capa de miedo y bajo el agua negra, había una verdad: el bosque no era un enemigo a vencer, sino un espejo que había que atravesar.</p>
+
+                <p>Cerró los ojos y, en lugar de intentar ver con la vista, vio con su resistencia. Percibió que el camino no estaba "delante" de ella, sino "dentro". El bosque se alimentaba de su reacción. Si ella dejaba de reaccionar con miedo, el bosque perdía su forma.</p>
+
+                <p>Dio un paso hacia el agua. No se hundió. La superficie era sólida como el hielo, a pesar de que aún parecía líquida y oscura. Caminó sobre el espejo de sus propios miedos, cada paso una afirmación de su existencia. No necesitaba que nadie la viera para saber que estaba allí.</p>
+            </article>
+
+            <!-- CAPÍTULO 4: La Salida -->
+            <article class="capitol" data-cap="4">
+                <h2>La Salida sin Retorno</h2>
+
+                <p>Cuando llegó a la otra orilla, el bosque hizo un último intento. Los árboles comenzaron a llorar una savia negra y espesa, y el aire se volvió tan frío que el aliento de Elna se cristalizaba ante ella. Pero ella ya no miraba las sombras. Mantenía su magia activa, una armadura invisible que repelía la desesperación.</p>
+
+                <p>Poco a poco, la densidad de la vegetación fue disminuyendo. La luz cambió de aquel lila opresivo a un gris alba, más natural, más honesto. Los pájaros, los de verdad, comenzaron a cantar en algún lugar lejano.</p>
+
+                <p>Elna salió del perímetro de los árboles más antiguos y se encontró en un prado de gramíneas altas, bañadas por el rocío. Se giró para mirar atrás. El bosque parecía ahora una mancha oscura y silenciosa bajo el cielo de madrugada, imperturbable, guardando sus secretos para el próximo viajero.</p>
+
+                <p>No se sentía victoriosa en el sentido clásico. No llevaba ningún tesoro, ni había aprendido ningún conjuro nuevo. Pero, cuando se miró las manos, notó que las puntas de sus dedos tenían una leve claridad plateada que no se iba. Su magia ya no era solo una herramienta de defensa; se había integrado en ella, transformando su manera de ver el mundo.</p>
+
+                <p>Había entrado al bosque como una niña que temía su propia sombra y salía como alguien que sabía que la sombra era solo una parte de la luz. El camino hacia casa aún era largo y el bosque de las voces seguiría allí, esperando en la frontera de la realidad. Elna comenzó a caminar, sabiendo que, aunque el misterio del bosque no se hubiera resuelto, ella ya no era la misma que se había perdido en él.</p>
+            </article>
+
+            <div class="epilog">
+                <p>Fin</p>
+            </div>
+        </div>
+
+        <!-- ENGLISH -->
+        <div class="idioma-content" id="content-en">
+            <!-- CHAPTER 1: The Loss -->
+            <article class="capitol" data-cap="1">
+                <h2>The Loss</h2>
+
+                <p>Elna didn't know exactly when she had gotten lost. There had been no sudden break, no path that ended abruptly. Simply, the light had turned a sickly green and the smell of damp moss had become so dense that it seemed almost chewable. At twelve years old, Elna knew the forest didn't want to devour her, but it did want her to stay. It wanted her to become another statue in that museum of wood and silence.</p>
+
+                <p>The air was motionless, of an artificial stillness. On the ground, the dry leaves didn't crunch beneath her feet; they sank into a bed of silent decay. Despite the lack of wind, the highest branches of the oaks twisted around each other, like the fingers of elders trying to remember a caress.</p>
+
+                <figure class="moment-visual" data-img="1">
+                    <img src="assets/images/moment1.jpg" alt="The watching birch">
+                    <figcaption class="peu-imatge">The watching birch</figcaption>
+                </figure>
+
+                <p>Elna stopped before a birch tree with a white trunk spotted with black. She had seen it before. Three times. She recognized it by the wound shaped like an eye that opened in the bark, a wooden gaze that seemed to judge her indecision.</p>
+
+                <p>"I'm not going in circles," she whispered, more to hear her own voice than out of conviction.</p>
+
+                <p>But the forest answered with its first trap. Her own voice returned to her, but deformed. It wasn't an echo, it was a parody.</p>
+
+                <p><em>"...I'm not... I am not... I cannot..."</em>, the shadows moved among the bushes.</p>
+
+                <p>Elna closed her eyes. This is where her magic, that faint flame her grandfather called The Perseverance, began to beat beneath her skin. It wasn't magic of radiant light or fireballs; it was a dull resistance, an ability to filter reality from deception. She placed her hand over her chest and felt her own heart, the only reliable clock in that place where time seemed to have dissolved into the fog.</p>
+            </article>
+
+            <!-- CHAPTER 2: The Mirror of Voices -->
+            <article class="capitol" data-cap="2">
+                <h2>The Mirror of Voices</h2>
+
+                <p>As she walked, the mist began to filter between the trunks like a cold gas. It wasn't white, but an ashen gray that blurred everything. Elna saw silhouettes. There, between two colossal oaks, there seemed to be the figure of her mother, with her back turned, sewing with threads that were cobwebs.</p>
+
+                <p>"Mother?" she said, even knowing it was impossible.</p>
+
+                <p><em>"You are not good enough yet, Elna,"</em> the figure said without turning around. The voice didn't come from the silhouette, but from beneath the earth, as if the roots were speaking. <em>"You are lost because you have always been afraid to decide. You are a bird without wings, a witch without a wand. What do you plan to do when night falls completely?"</em></p>
+
+                <figure class="moment-visual" data-img="2">
+                    <img src="assets/images/moment2.jpg" alt="The figure of the mother">
+                    <figcaption class="peu-imatge">The forest's trap</figcaption>
+                </figure>
+
+                <p>Elna felt a stab in her chest, a coldness that wasn't climatic. It was doubt. The forest didn't use claws, it used her own memories, the insecurities she kept under her bed before going to sleep. The voices multiplied. They were the voices of the village children laughing at her, the voice of her teacher saying her magic was <em>"too subtle to be useful"</em>.</p>
+
+                <p>"Enough," Elna said, planting her feet on the ground.</p>
+
+                <p>She activated her perception. She stopped listening to the words and began to "feel" the origin of the sound. They weren't human voices; it was the rustling of dry leaves manipulated by her own fear. With an effort of will, she imagined a wall of transparent glass around her heart. The voices struck the glass and broke like waves against a cliff.</p>
+
+                <p>The forest, enraged by her resistance, changed tactics. The trees began to move. They didn't run, but when Elna blinked, the trunks had shifted a few centimeters, closing the space, narrowing the path until she almost had to walk sideways.</p>
+            </article>
+
+            <!-- CHAPTER 3: The Trial of the Void -->
+            <article class="capitol" data-cap="3">
+                <h2>The Trial of the Void</h2>
+
+                <p>She reached a clearing where the sunlight, or what remained of it, filtered through in purple and oblique rays. In the center, a pond of black and motionless waters awaited her. Elna knew she had to reach the other side, but there was no bridge, and the water seemed to have no bottom.</p>
+
+                <p>She sat at the edge. Suddenly, loneliness struck her with all its force. There was no one to save her. If she stayed there, she would become part of the landscape, a statue of moss and bones. Sadness was a fog heavier than the forest's. She remembered all the times she had felt invisible in the outside world.</p>
+
+                <figure class="moment-visual" data-img="3">
+                    <img src="assets/images/moment3.jpg" alt="The black pond">
+                    <figcaption class="peu-imatge">The mirror of fears</figcaption>
+                </figure>
+
+                <p><em>"If no one sees you, do you really exist?"</em>, the forest asked with a whisper of nonexistent wind.</p>
+
+                <p>Elna looked at her reflection in the black water. She didn't see her face, but a void. For a moment, she was about to let herself fall, to accept that the forest was right. But then she noticed a small vibration in her fingers. It was her perception magic, catching something the forest was trying to hide.</p>
+
+                <p>Beneath the layer of fear and beneath the black water, there was a truth: the forest was not an enemy to defeat, but a mirror that had to be crossed.</p>
+
+                <p>She closed her eyes and, instead of trying to see with sight, she saw with her resistance. She perceived that the path was not "in front" of her, but "within". The forest fed on her reaction. If she stopped reacting with fear, the forest lost its form.</p>
+
+                <p>She took a step toward the water. She didn't sink. The surface was solid as ice, even though it still looked liquid and dark. She walked over the mirror of her own fears, each step an affirmation of her existence. She didn't need anyone to see her to know she was there.</p>
+            </article>
+
+            <!-- CHAPTER 4: The Exit -->
+            <article class="capitol" data-cap="4">
+                <h2>The Exit Without Return</h2>
+
+                <p>When she reached the other shore, the forest made one last attempt. The trees began to weep a thick black sap, and the air became so cold that Elna's breath crystallized before her. But she no longer looked at the shadows. She kept her magic active, an invisible armor that repelled despair.</p>
+
+                <p>Little by little, the density of the vegetation began to diminish. The light changed from that oppressive lilac to a dawn gray, more natural, more honest. The birds, the real ones, began to sing somewhere in the distance.</p>
+
+                <p>Elna stepped out from the perimeter of the oldest trees and found herself in a meadow of tall grasses, bathed in dew. She turned to look back. The forest now seemed like a dark and silent stain beneath the dawn sky, imperturbable, guarding its secrets for the next traveler.</p>
+
+                <p>She didn't feel victorious in the classical sense. She carried no treasure, nor had she learned any new spell. But when she looked at her hands, she noticed that the tips of her fingers had a faint silvery glow that wouldn't go away. Her magic was no longer just a tool of defense; it had integrated into her, transforming her way of seeing the world.</p>
+
+                <p>She had entered the forest as a girl who feared her own shadow and emerged as someone who knew that shadow was only a part of the light. The road home was still long and the forest of voices would remain there, waiting at the border of reality. Elna began to walk, knowing that, although the mystery of the forest had not been solved, she was no longer the same girl who had gotten lost in it.</p>
+            </article>
+
+            <div class="epilog">
+                <p>The End</p>
+            </div>
+        </div>
+
+    
+        <!-- RESUM / RESUMEN / SUMMARY -->
+        <div class="idioma-content" id="content-resum">
+            <article class="capitol" data-cap="resum">
+                <h2>Resum de la Història</h2>
+
+                <div class="resum-section">
+                    <h3>Català</h3>
+                    <p>Elna, una nena de dotze anys, es perd en un bosc misteriós que sembla viu i conscient. El bosc no vol devorar-la, sinó que vol que es quedi per sempre, convertida en una estàtua de fusta i silenci. Utilitzant la seva màgia de perseverança —una resistència sorda que li permet filtrar la realitat de l'engany—, Elna ha d'enfrontar-se a les trampes del bosc: veus que imiten els seus éssers estimats, ombres que juguen amb les seves inseguretats, i un estany negre que reflecteix els seus pitjors temors. A través de quatre proves, descobreix que el bosc és un mirall de les seves pròpies pors i que l'única manera de sortir és acceptar qui és realment. Quan finalment escapa, no porta cap tresor material, però la seva màgia s'ha integrat en ella, transformant-la per sempre. Ha entrat al bosc com una nena que temia la seva pròpia ombra i en surt com algú que sap que l'ombra és només una part de la llum.</p>
+                </div>
+
+                <div class="resum-section">
+                    <h3>Castellano</h3>
+                    <p>Elna, una niña de doce años, se pierde en un bosque misterioso que parece vivo y consciente. El bosque no quiere devorarla, sino que quiere que se quede para siempre, convertida en una estatua de madera y silencio. Utilizando su magia de perseverancia —una resistencia sorda que le permite filtrar la realidad del engaño—, Elna debe enfrentarse a las trampas del bosque: voces que imitan a sus seres queridos, sombras que juegan con sus inseguridades, y un estanque negro que refleja sus peores temores. A través de cuatro pruebas, descubre que el bosque es un espejo de sus propios miedos y que la única manera de salir es aceptar quién es realmente. Cuando finalmente escapa, no lleva ningún tesoro material, pero su magia se ha integrado en ella, transformándola para siempre. Había entrado al bosque como una niña que temía su propia sombra y sale como alguien que sabe que la sombra es solo una parte de la luz.</p>
+                </div>
+
+                <div class="resum-section">
+                    <h3>English</h3>
+                    <p>Elna, a twelve-year-old girl, gets lost in a mysterious forest that seems alive and conscious. The forest doesn't want to devour her, but rather wants her to stay forever, transformed into a statue of wood and silence. Using her magic of perseverance —a dull resistance that allows her to filter reality from deception—, Elna must face the forest's traps: voices that mimic her loved ones, shadows that play with her insecurities, and a black pond that reflects her worst fears. Through four trials, she discovers that the forest is a mirror of her own fears and that the only way out is to accept who she really is. When she finally escapes, she carries no material treasure, but her magic has integrated into her, transforming her forever. She had entered the forest as a girl who feared her own shadow and emerges as someone who knows that shadow is only a part of the light.</p>
+                </div>
+            </article>
+        </div>
+
+    </main>
+
+    <!-- Control d'àudio -->
+    <div class="audio-control" id="audioBtn" title="Activar/Desactivar so ambient">
+        <svg id="icon-sound" viewBox="0 0 24 24">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        </svg>
+        <svg id="icon-mute" viewBox="0 0 24 24" style="display: none;">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+        </svg>
+    </div>
+
+    <div class="indicador-audio" id="audioIndicator">
+        So ambient activat
+    </div>
+
+    <!-- Àudio -->
+    <audio id="bgAudio" loop>
+        <source src="assets/audio/soroll-temps.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
-        // Generar partículas de fondo
-        const particlesContainer = document.getElementById('particles');
-        for (let i = 0; i < 50; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 20 + 's';
-            particle.style.animationDuration = (15 + Math.random() * 10) + 's';
-            particlesContainer.appendChild(particle);
-        }
+        // ========== PESTANYES D'IDIOMES ==========
+        const pestanyes = document.querySelectorAll('.pestanya');
+        const continguts = document.querySelectorAll('.idioma-content');
 
-        // Animación de barras al hacer scroll
+        pestanyes.forEach(pestanya => {
+            pestanya.addEventListener('click', () => {
+                const idioma = pestanya.dataset.idioma;
+                
+                // Actualitzar pestanyes actives
+                pestanyes.forEach(p => p.classList.remove('active'));
+                pestanya.classList.add('active');
+                
+                // Mostrar contingut corresponent
+                continguts.forEach(c => {
+                    c.classList.remove('active');
+                    if (c.id === `content-${idioma}`) {
+                        c.classList.add('active');
+                    }
+                });
+                
+                // Reobservar elements per animacions
+                setTimeout(() => {
+                    document.querySelectorAll('.capitol, .moment-visual').forEach(el => {
+                        observer.observe(el);
+                        el.classList.remove('visible');
+                    });
+                    // Forzar verificación inicial
+                    checkVisibleElements();
+                }, 100);
+            });
+        });
+
+        // ========== AUDIO ==========
+        const audioBtn = document.getElementById('audioBtn');
+        const bgAudio = document.getElementById('bgAudio');
+        const iconSound = document.getElementById('icon-sound');
+        const iconMute = document.getElementById('icon-mute');
+        const indicator = document.getElementById('audioIndicator');
+        let isPlaying = false;
+
+        audioBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                bgAudio.pause();
+                audioBtn.classList.remove('active');
+                audioBtn.classList.add('mute');
+                iconSound.style.display = 'block';
+                iconMute.style.display = 'none';
+            } else {
+                bgAudio.play().then(() => {
+                    audioBtn.classList.add('active');
+                    audioBtn.classList.remove('mute');
+                    iconSound.style.display = 'none';
+                    iconMute.style.display = 'block';
+                    indicator.classList.add('visible');
+                    setTimeout(() => indicator.classList.remove('visible'), 2000);
+                }).catch(e => {
+                    console.log('Autoplay blocked:', e);
+                });
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // ========== ANIMACIONS SCROLL ==========
         const observerOptions = {
-            threshold: 0.5,
-            rootMargin: "0px"
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
         };
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.width = entry.target.classList.contains('pc1') ? '85%' : '100%';
+                    entry.target.classList.add('visible');
                 }
             });
         }, observerOptions);
 
-        document.querySelectorAll('.chart-bar').forEach(bar => {
-            bar.style.width = '0';
-            observer.observe(bar);
+        function checkVisibleElements() {
+            document.querySelectorAll('.capitol, .moment-visual').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Observar capítols inicials
+        checkVisibleElements();
+
+        // ========== PARTÍCULES (efecte de pols/boira) ==========
+        const canvas = document.getElementById('particules');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const particules = [];
+        const numParticules = 25;
+
+        class Particula {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.speedY = (Math.random() - 0.5) * 0.3;
+                this.opacity = Math.random() * 0.5 + 0.1;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > canvas.width ||
+                    this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(140, 160, 140, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < numParticules; i++) {
+            particules.push(new Particula());
+        }
+
+        function animateParticules() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particules.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticules);
+        }
+        animateParticules();
+
+        // ========== EFECTE PARAL·LAXI PORTADA ==========
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const portada = document.querySelector('.portada-imatge');
+            if (scrolled < window.innerHeight) {
+                portada.style.transform = `translateY(${scrolled * 0.5}px) scale(${1 + scrolled * 0.0005})`;
+            }
         });
     </script>
+
 </body>
 </html>
